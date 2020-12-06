@@ -1,37 +1,53 @@
-def fibs(value = 1)
-    temp = 1
-    number1 = 1
-    number2 = 1
-    if value == 1
-        puts "01"
+def merge_sort(array)
+    #basecase
+    if array.length <= 1
+        array
+
     else
-        stno = "11"
-        until temp == value - 1
-            number = number1 + number2
-            number2 = number1
-            number1 = number
-            stno = stno + number.to_s
-            temp += 1
+        #devide string unttil indivisible
+        if array.length.even? == true
+            #two equal halves
+            array_half_l = merge_sort(array[0..((array.length/2)-1)])
+            array_half_r = merge_sort(array[(array.length/2)..-1])
+            merge(array_half_l, array_half_r)
+
+        else
+            #two unequal halves. Left takes most elements
+            #odd includes 1 so this is where sub division stops
+            array_half_l =  merge_sort(array[0..((array.length/2 + 0.5)-1)])
+            array_half_r =  merge_sort(array[(array.length/2 + 0.5)..-1])
+            merge(array_half_l, array_half_r)
 
         end
-        
 
     end
 
-    puts stno
+end
+
+def merge(array_half_l, array_half_r)
+    #checking which element is larger follows    
+    array_out = []
+    (array_half_l.length + array_half_r.length).times do
+        if array_half_r[0].nil?
+            array_out.append(array_half_l.shift)
+
+        elsif array_half_l[0].nil?
+            array_out.append(array_half_r.shift)
+
+        elsif array_half_l[0] > array_half_r[0]
+            array_out.append(array_half_r.shift)
+
+        elsif  array_half_l[0] < array_half_r[0]
+            array_out.append(array_half_l.shift)
+
+        end
+
+    end
+
+    return array_out
 
 end
 
-def fibs_rec(value)
-    return value if value < 2
-    fibs_rec(value-1) + fibs_rec(value-2)
-
-end
-
-def printing_values(value)
-    (1..value).each { |values| puts fibs_rec(values) }
-
-end
-
-a = printing_values(5)
-b = fibs(5)
+arr = [8, 18, 14, 5, 19, 10, 6, 3]
+sorted_array = merge_sort(arr)
+p sorted_array
